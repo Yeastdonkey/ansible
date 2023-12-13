@@ -1,2 +1,10 @@
-192.168.68.57
-127.0.0.1
+---
+  hosts:
+
+    [YeastLab]
+      ansible_host: 192.168.68.57
+      ansible_port: 22
+
+    [localhost]
+      ansible_host: 127.0.0.1
+      ansible_port: 22
