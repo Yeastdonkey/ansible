@@ -1,7 +1,7 @@
 ---
-- hosts: '{{ host }}'
-  become: true
-  tasks:
+hosts: '{{ host }}'
+become: true
+tasks:
 
 - name: Check if keyring exists
   ansible.builtin.stat:
