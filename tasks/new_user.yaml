@@ -1,0 +1,11 @@
+---
+hosts: '{{ target_host }}'
+become: true
+tasks:
+
+vars_prompt:
+  - name: username
+    prompt: Enter the new user's username
+    private: true
+
+- name: create new user

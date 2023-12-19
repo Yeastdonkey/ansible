@@ -1,0 +1,12 @@
+---
+server_packages:
+    - python3-pip
+    
+
+workstation_packages:
+    - vlc
+    - gimp
+    - python3-pip
+
+greg_packages:
+    - thunderbird

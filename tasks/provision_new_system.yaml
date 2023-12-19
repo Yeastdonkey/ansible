@@ -1,4 +1,12 @@
 ---
+vars_prompt:
+  - name: target_host
+    prompt: Enter target host IP address
+    private: false
+  - name: packages_type
+    prompt: Enter the base package set (server_package, workstation_packages, greg_packages)
+  - name: user
+
 hosts: '{{ target_host }}' # use 'target_host=[host]' in cli
 become: true
 tasks:
@@ -13,11 +21,12 @@ tasks:
   authorized_keys:
     user: ansible
     key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMYnUNuEnfDgFguU2ZSBLCJE3fq23tBTitYY1RWR8RTi ansible"
+    state: present
 
 - name: enable passwordless sudo for ansible
   lineinfile:
     path: /etc/sudoers
-    regexp: "^%wheel"
+    search_string: "ansible"
     line: "ansible ALL=(ALL) NOPASSWD: ALL"
     validate: "/usr/sbin/visudo -cf %s"
 
