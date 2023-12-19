@@ -1,7 +1,7 @@
 ---
 vars_prompt:
   - name: target_host
-    prompt: Enter target host IP address
+    prompt: Enter target host IP address or hostname
     private: false
   - name: packages_type
     prompt: Enter the base package set (server_package, workstation_packages, greg_packages)
