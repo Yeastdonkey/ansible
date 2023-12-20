@@ -23,38 +23,38 @@ hosts: '{{ target_host }}'
 become: true
 tasks:
 
-- name: create new user
-  user:
-    user: '{{ username }}'
-    group: '{{ username }}'
-    password: '{{ password | password_hash('sha512') }}'
-    append: true
-    create_home: true
-    generate_ssh_key: true
-    ssh_key_type: ed25519
-    ssh_key_comment: ansible-generated on $HOSTNAME for '{{ username }}'
+  - name: create new user
+    user:
+      user: '{{ username }}'
+      group: '{{ username }}'
+      password: '{{ password | password_hash('sha512') }}'
+      append: true
+      create_home: true
+      generate_ssh_key: true
+      ssh_key_type: ed25519
+      ssh_key_comment: ansible-generated on $HOSTNAME for '{{ username }}'
 
-- name: adding sudo group if applicable
-  user:
-    user: '{{ username }}'
-    groups: sudo
-    append: yes
-  when: sudo in ["y", "Y"]
+  - name: adding sudo group if applicable
+    user:
+      user: '{{ username }}'
+      groups: sudo
+      append: yes
+    when: sudo in ["y", "Y"]
 
-- name: enabling passwordless sudo if applicable
-  lineinfile:
-    path: /etc/sudoers
-    search_string: '{{ username }}'
-    line: "{{ username }} ALL=(ALL) NOPASSWD: ALL"
-    validate: "/usr/sbin/visudo -cf %s"
+  - name: enabling passwordless sudo if applicable
+    lineinfile:
+      path: /etc/sudoers
+      search_string: '{{ username }}'
+      line: "{{ username }} ALL=(ALL) NOPASSWD: ALL"
+      validate: "/usr/sbin/visudo -cf %s"
 
-- name: suppressing login message if applicable
-  file:
-    path: '/home/{{ username }}/.hushlogin'
-    mode: 0644
-    owner: '{{ username }}'
-    group: '{{ username }}'
-    modification_time: preserve
-    access_time: preserve
-    state: touch
-  when: suppress in ["y", "Y"]
+  - name: suppressing login message if applicable
+    file:
+      path: '/home/{{ username }}/.hushlogin'
+      mode: 0644
+      owner: '{{ username }}'
+      group: '{{ username }}'
+      modification_time: preserve
+      access_time: preserve
+      state: touch
+    when: suppress in ["y", "Y"]

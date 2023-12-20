@@ -5,45 +5,42 @@ vars_prompt:
     private: false
   - name: packages_type
     prompt: Enter the base package set (server_package, workstation_packages, greg_packages)
-  - name: user
+  - name: admin_username
+    prompt: Enter the administrator username on the target system
 
-hosts: '{{ target_host }}' # use 'target_host=[host]' in cli
+hosts: '{{ target_host }}'
 become: true
 tasks:
 
-- name: create ansible user
-  user:
-    name: ansible
-    groups: root
-    create_home: false
+  - name: create ansible user
+    user:
+      name: ansible
+      groups: root
+      create_home: false
 
-- name: add ansible user ssh key
-  authorized_keys:
-    user: ansible
-    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMYnUNuEnfDgFguU2ZSBLCJE3fq23tBTitYY1RWR8RTi ansible"
-    state: present
+  - name: add ansible user ssh key
+    authorized_keys:
+      user: ansible
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMYnUNuEnfDgFguU2ZSBLCJE3fq23tBTitYY1RWR8RTi ansible"
+      state: present
 
-- name: enable passwordless sudo for ansible
-  lineinfile:
-    path: /etc/sudoers
-    search_string: "ansible"
-    line: "ansible ALL=(ALL) NOPASSWD: ALL"
-    validate: "/usr/sbin/visudo -cf %s"
+  - name: enable passwordless sudo for ansible
+    lineinfile:
+      path: /etc/sudoers
+      search_string: "ansible"
+      line: "ansible ALL=(ALL) NOPASSWD: ALL"
+      validate: "/usr/sbin/visudo -cf %s"
 
-- name: update cache and upgrade packages
-  apt:
-    update_cache: true
-    upgrade: full
-    state: latest
+  - name: update cache and upgrade packages
+    apt:
+      update_cache: true
+      upgrade: full
+      state: latest
 
-  name: 'add brave repo to apt.list'
-  uri:
-    url: 'https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg'
-    method: GET
-    dest: /usr/share/keyrings/brave-browser-archive-keyring.gpg
-    follow_redirects: safe
+  - name: install essential packages
+    package:
+      name: "{{ "{{packages_type}}" }}"
+      state: latest
 
-- name: install essential packages
-  package:
-    name: "{{ "{{packages_type}}" }}" # use 'packages_type=[type]' in cli. options are server_packages, workstation_packages
-    state: latest
+- name: install brave brave-browser
+  import_playbook: install_brave_browser.yaml
