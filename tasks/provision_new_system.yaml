@@ -38,8 +38,8 @@ tasks:
       state: latest
 
   - name: install essential packages
-    package:
-      name: "{{ "{{packages_type}}" }}"
+    apt:
+      name: '{{ packages_type }}'
       state: latest
 
 - name: install brave brave-browser
