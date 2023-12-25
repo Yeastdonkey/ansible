@@ -42,5 +42,5 @@ tasks:
       name: '{{ packages_type }}'
       state: latest
 
-- name: install brave brave-browser
-  import_playbook: install_brave_browser.yaml
+  - name: install brave brave-browser
+    import_playbook: install_brave_browser.yaml
