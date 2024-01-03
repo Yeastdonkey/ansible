@@ -21,8 +21,7 @@ tasks:
   - name: add ansible user ssh key
     authorized_keys:
       user: ansible
-      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMYnUNuEnfDgFguU2ZSBLCJE3fq23tBTitYY1RWR8RTi ansible"
-      state: present
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMYnUNuEnfda
 
   - name: enable passwordless sudo for ansible
     lineinfile:
